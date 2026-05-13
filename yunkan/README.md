@@ -1,15 +1,15 @@
-# 云瞰 SkyView — Home Assistant Add-on
+# 云瞰 VMS — Home Assistant Add-on
 
 把云瞰单镜像直接装进 Home Assistant，省去单独 docker compose 部署。
 
-- 镜像：`registry.cn-hangzhou.aliyuncs.com/skyview/skyview-cpu:0.7.3`
+- 镜像：`registry.cn-hangzhou.aliyuncs.com/skyview/skyview-cpu:0.7.7`
 - 架构：仅 `amd64`
 - 网络：`host_network`（WebRTC / RTSP / mDNS 多端口必需）
 - 持久化：HA 自动管理 `/data`（容器内软链到 `/app/data`）
 
 ## 端口
 
-加载项的端口段在云瞰原 `+10000` 偏移基础上再 `+5326`，落到 23000-25000 这段冷门区间，避开 HA Core 内置 go2rtc（占 18554/18555）以及 Frigate / Zigbee2MQTT 等常见加载项。
+云瞰所有端口在标准默认基础上 `+15326` 偏移到 23000-25000 这段冷门区间，避开 HA Core 内置 go2rtc（占 18554/18555）以及 Frigate / Zigbee2MQTT 等常见加载项。**端口在镜像里 hardcode，不可通过加载项选项改**——需要换端口请用独立 docker compose 部署并自行挂卷覆盖 `mediamtx.yml` / `nginx.conf`。
 
 | 端口 | 协议 | 用途 |
 | --- | --- | --- |
@@ -28,10 +28,6 @@
 | key | 默认 | 说明 |
 | --- | --- | --- |
 | `timezone` | `Asia/Shanghai` | 容器时区，影响日志时间戳与静默时段 cron |
-| `log_level` | `info` | s6-overlay / loguru 日志级别 |
-| `public_host` | 空 | 外部访问的主机名/IP，留空则由请求 Host 推导。套 nginx 反代时填域名 |
-| `public_scheme` | `http` | 外部访问的协议，反代套 HTTPS 时改 `https` |
-| `public_port` | `23406` | 外部访问的端口（mDNS 广播 / 移动端发现用） |
 
 ## 首次启动
 
@@ -58,11 +54,13 @@
 - 不支持 NVIDIA CUDA / Intel iGPU 硬件加速（HA 加载项无法稳定挂 `/dev/dri` 或 GPU），
   检测全部走 CPU。需要硬件加速请用独立 docker compose 部署而不是 HA 加载项。
 - 私有协议摄像头（Tapo / 小米 / Wyze）需自行部署 go2rtc 桥接为标准 RTSP。
+- 端口在镜像里 hardcode，加载项选项不暴露端口配置项。需要套外层反代到自定义
+  域名 / 端口时，由 HA Nginx Proxy Manager 等加载项处理 upstream `:23406`。
 
 ## 故障排查
 
 - 加载项启动后 webui 打不开：HA 加载项日志看 s6 启动序列，等 `api ready` 和
   `nginx started`，首次启动加载模型可能耗时 30-60s。
 - WebRTC 拉流黑屏：确认加载项以 `host_network: true` 启动（本仓库默认就是），
-  且 HA 主机防火墙没拦截 18189/udp。
+  且 HA 主机防火墙没拦截 `23515/udp`。
 - License 激活失败：检查 HA 主机能否访问 `https://license.yun-kan.com`。

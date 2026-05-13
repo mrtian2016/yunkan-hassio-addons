@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.7.7
+
+- bump 镜像 tag 到 `0.7.7`：主项目源码端口段已原生 +15326 偏移到 23000-25000，
+  加载项 Dockerfile **不再需要 sed-patch** 镜像内的 mediamtx.yml / config.toml /
+  nginx.conf / s6-rc.d 配置，HEALTHCHECK 和 `SKYVIEW_PUBLIC_PORT` 在镜像里已
+  指向 23406。`yunkan/Dockerfile` 简化到只剩 `/data` 软链一条 `RUN`。
+- 删掉 `public_host` / `public_scheme` / `public_port` / `log_level` 4 个加载项
+  选项：这些 env 只影响 mDNS 广播 / Origin header / loguru 级别（实际上
+  `log_level` 没接到 loguru），让用户误以为能改 nginx/mediamtx 监听端口。
+  端口在镜像里 hardcode，加载项不暴露假配置项。剩下唯一选项 `timezone`。
+
 ## 0.7.3-1
 
 - 端口段二次偏移避开 HA Core 内置 go2rtc 占用的 18554/18555。所有端口在原
