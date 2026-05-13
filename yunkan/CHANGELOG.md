@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.7.8
+
+- bump 镜像 tag 到 `0.7.8`(主项目 0.7.7 因 HTTP 部署登录死循环 + Nuitka build
+  卡 NVIDIA CDN 撤回,跳到 0.7.8)。
+- 此前 0.7.7 仓库 commit 已切换镜像 tag,本次只 follow-up bump 配置 / CHANGELOG /
+  README 文档,加载项 Dockerfile 本身不变(还是只剩 `/data` 软链一条 RUN)。
+
 ## 0.7.7
 
 - bump 镜像 tag 到 `0.7.7`：主项目源码端口段已原生 +15326 偏移到 23000-25000，
