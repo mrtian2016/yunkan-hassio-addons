@@ -9,15 +9,19 @@
 
 ## 端口
 
+加载项的端口段在云瞰原 `+10000` 偏移基础上再 `+5326`，落到 23000-25000 这段冷门区间，避开 HA Core 内置 go2rtc（占 18554/18555）以及 Frigate / Zigbee2MQTT 等常见加载项。
+
 | 端口 | 协议 | 用途 |
 | --- | --- | --- |
-| 18080 | TCP | HTTP Dashboard / API（nginx 总入口） |
-| 18554 | TCP | RTSP 直连 mediamtx |
-| 18888 | TCP | HLS |
-| 18889 | TCP | WebRTC WHEP signaling |
-| 18189 | UDP | WebRTC ICE |
+| 23406 | TCP | HTTP Dashboard / API（nginx 总入口） |
+| 23880 | TCP | RTSP 直连 mediamtx |
+| 24214 | TCP | HLS |
+| 24215 | TCP | WebRTC WHEP signaling |
+| 23515 | UDP | WebRTC ICE |
 
-加载项启动后浏览器访问 `http://<HA-IP>:18080/`，或点加载项页面「打开 Web 界面」。
+加载项启动后浏览器访问 `http://<HA-IP>:23406/`，或点加载项页面「打开 Web 界面」。
+
+移动端 App（Android / iOS）首次添加服务器时，手动 base URL 填 `http://<HA-IP>:23406`。摄像头如需 RTSP 推流，地址用 `rtsp://<HA-IP>:23880/<path>`。
 
 ## 选项
 
@@ -27,7 +31,7 @@
 | `log_level` | `info` | s6-overlay / loguru 日志级别 |
 | `public_host` | 空 | 外部访问的主机名/IP，留空则由请求 Host 推导。套 nginx 反代时填域名 |
 | `public_scheme` | `http` | 外部访问的协议，反代套 HTTPS 时改 `https` |
-| `public_port` | `18080` | 外部访问的端口 |
+| `public_port` | `23406` | 外部访问的端口（mDNS 广播 / 移动端发现用） |
 
 ## 首次启动
 
