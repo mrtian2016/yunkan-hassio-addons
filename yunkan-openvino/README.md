@@ -4,7 +4,7 @@ OpenVINO 变体，**支持 Intel iGPU 推理加速**。如果你的 HA 主机是
 N305 / Core i3-12100 等带 UHD 6xx / Iris Xe / Arc iGPU 的机型，请装这个加载
 项；纯 CPU 推理请用并列的「云瞰 VMS」加载项。
 
-- 镜像：`registry.cn-hangzhou.aliyuncs.com/skyview/skyview-openvino:0.7.8`
+- 镜像：`registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-openvino:0.7.8`
 - 架构：仅 `amd64`
 - 网络：`host_network`（WebRTC / RTSP / mDNS 多端口必需）
 - 设备：`/dev/dri:/dev/dri:rwm`（Intel iGPU render node 透传）

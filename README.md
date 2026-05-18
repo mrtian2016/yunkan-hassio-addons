@@ -23,8 +23,8 @@ ARM (树莓派 / aarch64) 暂不支持。
 加载项基于阿里云镜像仓库：
 
 ```
-registry.cn-hangzhou.aliyuncs.com/skyview/skyview-cpu:<version>        # 云瞰 VMS
-registry.cn-hangzhou.aliyuncs.com/skyview/skyview-openvino:<version>   # 云瞰 VMS (OpenVINO)
+registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cpu:<version>        # 云瞰 VMS
+registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-openvino:<version>   # 云瞰 VMS (OpenVINO)
 ```
 
 国内拉取无需翻墙。

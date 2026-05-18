@@ -1,5 +1,5 @@
 build_from:
-  amd64: registry.cn-hangzhou.aliyuncs.com/skyview/skyview-openvino:0.7.8
+  amd64: registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-openvino:0.9.0
 labels:
   org.opencontainers.image.title: 云瞰 VMS Home Assistant Add-on (OpenVINO)
   org.opencontainers.image.source: https://yun-kan.com

@@ -2,7 +2,7 @@
 
 把云瞰单镜像直接装进 Home Assistant，省去单独 docker compose 部署。
 
-- 镜像：`registry.cn-hangzhou.aliyuncs.com/skyview/skyview-cpu:0.7.8`
+- 镜像：`registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cpu:0.7.8`
 - 架构：仅 `amd64`
 - 网络：`host_network`（WebRTC / RTSP / mDNS 多端口必需）
 - 持久化：HA 自动管理 `/data`（容器内软链到 `/app/data`）
