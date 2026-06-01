@@ -1,5 +1,5 @@
 name: 云瞰 VMS
-version: "0.9.8"
+version: "0.9.9"
 slug: yunkan
 description: 自托管摄像头云录制 + AI 分析（人/车/人脸/车牌/姿态/跌倒）。本地优先，隐私不出局域网。
 url: https://yun-kan.com
