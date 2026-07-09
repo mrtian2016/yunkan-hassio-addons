@@ -1,5 +1,5 @@
 name: 云瞰 VMS (OpenVINO)
-version: "0.9.23"
+version: "0.9.25"
 slug: yunkan-openvino
 description: 自托管摄像头云录制 + AI 分析。OpenVINO 变体，支持 Intel iGPU (UHD 6xx+ / Iris Xe / Arc) 硬件加速，J4125 / N100 / N305 等机型推理吞吐 3-5x。
 url: https://yun-kan.com
