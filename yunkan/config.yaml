@@ -22,14 +22,16 @@ ports:
   23406/tcp: 23406
   23880/tcp: 23880
   24214/tcp: 24214
-  24215/tcp: 24215
   23515/udp: 23515
+  23515/tcp: 23515
+  23443/tcp: 23443
 ports_description:
-  23406/tcp: HTTP Dashboard / API（nginx 总入口）
-  23880/tcp: RTSP（摄像头 / 外部播放器直连 mediamtx）
-  24214/tcp: HLS 拉流
-  24215/tcp: WebRTC WHEP signaling
-  23515/udp: WebRTC ICE (UDP)
+  23406/tcp: 网页控制台 + App 接口 + 直播（必须）
+  23880/tcp: RTSP（外部播放器在局域网直连，可选）
+  24214/tcp: 内部流媒体服务（本机使用，不必对外开放）
+  23515/udp: 实时画面低延迟通道（UDP）
+  23515/tcp: 实时画面低延迟通道（TCP 回退）
+  23443/tcp: 公网直连（HTTPS，默认关闭；在网页里启用外网访问后才需要）
 webui: "http://[HOST]:[PORT:23406]/"
 panel_icon: mdi:cctv
 panel_title: 云瞰

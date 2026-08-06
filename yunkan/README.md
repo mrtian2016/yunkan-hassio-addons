@@ -9,19 +9,33 @@
 
 ## 端口
 
-云瞰所有端口在标准默认基础上 `+15326` 偏移到 23000-25000 这段冷门区间，避开 HA Core 内置 go2rtc（占 18554/18555）以及 Frigate / Zigbee2MQTT 等常见加载项。**端口在镜像里 hardcode，不可通过加载项选项改**——需要换端口请用独立 docker compose 部署并自行挂卷覆盖 `mediamtx.yml` / `nginx.conf`。
+云瞰所有端口在标准默认基础上 `+15326` 偏移到 23000-25000 这段冷门区间，避开 HA Core 内置 go2rtc（占 18554/18555）以及 Frigate / Zigbee2MQTT 等常见加载项。**局域网这几个端口在镜像里 hardcode，不通过加载项选项改**。唯一可以改的是公网直连端口（默认 23443），在网页后台里选，见下方「外网访问」。
 
-| 端口 | 协议 | 用途 |
-| --- | --- | --- |
-| 23406 | TCP | HTTP Dashboard / API（nginx 总入口） |
-| 23880 | TCP | RTSP 直连 mediamtx |
-| 24214 | TCP | HLS |
-| 24215 | TCP | WebRTC WHEP signaling |
-| 23515 | UDP | WebRTC ICE |
+| 端口 | 协议 | 用途 | 局域网要开吗 |
+| --- | --- | --- | --- |
+| 23406 | TCP | 网页控制台 + App 接口 + 直播（总入口） | 必须 |
+| 23515 | UDP + TCP | 实时画面低延迟通道 | 建议，不开会降级为 HLS（延迟约 2.5 秒） |
+| 23880 | TCP | RTSP，供外部播放器直连 | 可选 |
+| 24214 | TCP | 内部流媒体服务 | 不用开 |
+| 23443 | TCP | 公网直连（HTTPS），默认关闭 | 只在启用外网访问时开 |
 
 加载项启动后浏览器访问 `http://<HA-IP>:23406/`，或点加载项页面「打开 Web 界面」。
 
 移动端 App（Android / iOS）首次添加服务器时，手动 base URL 填 `http://<HA-IP>:23406`。摄像头如需 RTSP 推流，地址用 `rtsp://<HA-IP>:23880/<path>`。
+
+## 外网访问
+
+出门也想看的话，不用套反代、也不用自己折腾证书：
+
+1. 网页后台 → 设置 → 通用 → **HTTPS 证书**：填自己的域名 + DNS 服务商的 API key，
+   自动向 Let's Encrypt 申请证书并自动续期（DNS-01 验证，**不需要开 80 端口**）。
+   没有自己的域名也行，deSEC / DuckDNS 免费送子域名。
+2. 同一个面板里选一个**公网端口**（默认 23443），保存即生效。
+3. 路由器上把这一个 TCP 端口转发到 HA 主机即可；宽带有 IPv6 的话连转发都不用，
+   放行入站就行。
+
+之后用 `https://<你的域名>:23443/` 访问，实时画面走 WebRTC，延迟不到 1 秒。
+详见 <https://yun-kan.com/docs/remote-access>。
 
 ## 选项
 
@@ -54,8 +68,9 @@
 - 不支持 NVIDIA CUDA / Intel iGPU 硬件加速（HA 加载项无法稳定挂 `/dev/dri` 或 GPU），
   检测全部走 CPU。需要硬件加速请用独立 docker compose 部署而不是 HA 加载项。
 - 私有协议摄像头（Tapo / 小米 / Wyze）需自行部署 go2rtc 桥接为标准 RTSP。
-- 端口在镜像里 hardcode，加载项选项不暴露端口配置项。需要套外层反代到自定义
-  域名 / 端口时，由 HA Nginx Proxy Manager 等加载项处理 upstream `:23406`。
+- 局域网端口在镜像里 hardcode，加载项选项不暴露端口配置项（公网直连端口除外，
+  那个在网页后台里选）。想套外层反代到自定义域名时，由 HA Nginx Proxy Manager 等
+  加载项处理 upstream `:23406`。
 
 ## 故障排查
 
