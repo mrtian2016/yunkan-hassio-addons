@@ -46,3 +46,5 @@ schema:
 environment:
   TZ: "{{ options.timezone }}"
   SKYVIEW_SELF_CONTAINER_NAME: addon_local_yunkan-openvino
+  # 同 yunkan 加载项：显式声明部署形态，「不能一键升级」时给 HA 自己的更新入口。
+  SKYVIEW_DEPLOY_PLATFORM: ha_addon

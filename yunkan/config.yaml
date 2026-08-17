@@ -43,3 +43,6 @@ schema:
 environment:
   TZ: "{{ options.timezone }}"
   SKYVIEW_SELF_CONTAINER_NAME: addon_local_yunkan
+  # 加载项拿不到 docker 控制通道（平台限制，不是漏配）。显式声明部署形态，网页后台
+  # 就会给「去 HA 的加载项页面点更新」而不是劝用户补一行挂载——不依赖运行时嗅探。
+  SKYVIEW_DEPLOY_PLATFORM: ha_addon
